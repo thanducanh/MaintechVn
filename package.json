@@ -70,7 +70,16 @@
     "tailwindcss": "^4.2.0",
     "typescript": "^5"
   },
-  "engines": {
-    "node": ">=20.0.0"
+    "engines": {
+      "node": "22.x"
+    },
+    "trustedDependencies": [
+      "@prisma/engines",
+      "prisma",
+      "esbuild",
+      "@firebase/util",
+      "core-js",
+      "protobufjs",
+      "unrs-resolver"
+    ]
   }
-}
