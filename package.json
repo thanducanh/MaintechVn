@@ -71,7 +71,7 @@
     "typescript": "^5"
   },
     "engines": {
-      "node": "22.x"
+      "node": "24.x"
     },
     "trustedDependencies": [
       "@prisma/engines",
