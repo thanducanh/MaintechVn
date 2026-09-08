@@ -1,0 +1,825 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Service {
+  title_vi    String
+  desc_vi     String
+  category    String   @default("DỊCH VỤ")
+  price       String?
+  status      String   @default("HIỂN THỊ")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  desc_en     String?
+  title_en    String?
+  imageUrl    String?
+  order       Int      @default(0)
+  id          Int      @id @default(autoincrement())
+  summary     String?
+  supplier    String?
+  summary_en  String?
+  supplier_en String?
+
+  @@index([category])
+  @@index([status])
+  @@index([order])
+}
+
+model Article {
+  id               Int      @id @default(autoincrement())
+  title            String
+  slug             String   @unique
+  summary          String?
+  content          String?
+  category         String   @default("TIN TỨC")
+  status           String   @default("XUẤT BẢN")
+  viewCount        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  content_en       String?
+  summary_en       String?
+  title_en         String?
+  mission          String?
+  mission_en       String?
+  vision           String?
+  vision_en        String?
+  intro_box        String?
+  intro_footer     String?
+  intro_lead       String?
+  hero_bg_path     String?
+  hero_subtitle    String?
+  hero_subtitle_en String?
+  imageUrl         String?
+  intro_box_en     String?
+  intro_footer_en  String?
+  intro_lead_en    String?
+
+  @@index([category])
+  @@index([status])
+}
+
+model Inquiry {
+  id               Int      @id @default(autoincrement())
+  name             String
+  email            String
+  phone            String
+  service_interest String?
+  message          String
+  status           String   @default("Mới")
+  createdAt        DateTime @default(now())
+}
+
+model CompanyInfo {
+  id             Int      @id @default(autoincrement())
+  officeAddress  String?
+  factoryAddress String?
+  hotline        String?
+  email          String?
+  whatsappUrl    String?
+  telegramUrl    String?
+  zaloUrl        String?
+  updatedAt      DateTime @updatedAt
+}
+
+model SiteImage {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  name      String
+  imageUrl  String
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id                                         Int                @id @default(autoincrement())
+  employeeId                                 String?            @unique
+  username                                   String             @unique
+  password                                   String
+  role                                       String             @default("NHAN_VIEN")
+  department                                 String?            @default("KỸ THUẬT")
+  status                                     String?            @default("HOAT_DONG")
+  name                                       String
+  phone                                      String?
+  email                                      String?
+  dob                                        String?
+  gender                                     String?
+  address                                    String?
+  identityCard                               String?
+  bankAccount                                String?
+  emergencyPhone                             String?
+  createdAt                                  DateTime           @default(now())
+  updatedAt                                  DateTime?          @updatedAt
+  avatar                                     String?
+  bankName                                   String?
+  startDate                                  DateTime?
+  deletedAt                                  DateTime?
+  isDeleted                                  Boolean            @default(false)
+  position                                   String?
+  attendances                                Attendance[]
+  Contract_Contract_approvedByIdToUser       Contract[]         @relation("Contract_approvedByIdToUser")
+  Contract_Contract_createdByIdToUser        Contract[]         @relation("Contract_createdByIdToUser")
+  Contract_Contract_rejectedByIdToUser       Contract[]         @relation("Contract_rejectedByIdToUser")
+  Contract_Contract_submittedByIdToUser      Contract[]         @relation("Contract_submittedByIdToUser")
+  contracts                                  Contract[]
+  createdEconContracts                       EconomicContract[] @relation("EconContractCreator")
+  handledFeedbacks                           Feedback[]         @relation("HandlerRelation")
+  reportedFeedbacks                          Feedback[]         @relation("ReporterRelation")
+  Job_Job_createdByIdToUser                  Job[]              @relation("Job_createdByIdToUser")
+  managedJobs                                Job[]              @relation("ManagerJobs")
+  JobAssignee                                JobAssignee[]
+  JobAttachment                              JobAttachment[]
+  JobChecklist                               JobChecklist[]
+  JobComment                                 JobComment[]
+  JobLog                                     JobLog[]
+  JobWatcher                                 JobWatcher[]
+  KanbanActivity                             KanbanActivity[]
+  KanbanComment                              KanbanComment[]
+  KanbanTask_KanbanTask_creatorIdToUser      KanbanTask[]       @relation("KanbanCreator")
+  LeaveRequest                               LeaveRequest[]
+  maintenanceTasks                           MaintenanceTask[]  @relation("MaintenanceAssignee")
+  Notification_Notification_receiverIdToUser Notification[]     @relation("Notification_receiverIdToUser")
+  Notification_Notification_senderIdToUser   Notification[]     @relation("Notification_senderIdToUser")
+  createdProjects                            Project[]          @relation("ProjectCreator")
+  managedProjects                            Project[]          @relation("ProjectManager")
+  projectLogs                                ProjectLog[]       @relation("ProjectLogger")
+  projectMemberships                         ProjectMember[]    @relation("ProjectMember")
+  assignedPhases                             ProjectPhase[]     @relation("PhaseAssignee")
+  createdQuotes                              Quote[]            @relation("QuoteCreator")
+  salaries                                   Salary[]
+  schedules                                  Schedule[]
+  logs                                       SystemLog[]
+  assignedTasks                              Task[]             @relation("TechnicianTasks")
+  transactions                               Transaction[]      @relation("TransactionCreator")
+  KanbanTask_KanbanAssignee                  KanbanTask[]       @relation("KanbanAssignee")
+  KanbanChecklistItem_Assignee               KanbanChecklistItem[] @relation("KanbanChecklistAssignee")
+}
+
+model Schedule {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  date      String
+  shiftCode String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date, shiftCode])
+}
+
+model Attendance {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  date       String
+  checkIn    String?
+  checkOut   String?
+  status     String?
+  totalHours Float?   @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  note       String?
+  reason     String?
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model Contract {
+  id                                Int            @id @default(autoincrement())
+  userId                            Int
+  contractCode                      String         @unique
+  type                              String
+  startDate                         DateTime
+  endDate                           DateTime?
+  baseSalary                        Decimal?       @db.Decimal(18, 2)
+  status                            String         @default("HIEU_LUC")
+  createdAt                         DateTime       @default(now())
+  updatedAt                         DateTime       @updatedAt
+  allowances                        Decimal?       @default(0) @db.Decimal(18, 2)
+  approvalDueAt                     DateTime?
+  approvalStatus                    ApprovalStatus @default(DRAFT)
+  approvedAt                        DateTime?
+  approvedById                      Int?
+  attachmentUrl                     String?
+  category                          String         @default("MAIN")
+  createdById                       Int?
+  deletedAt                         DateTime?
+  isCurrent                         Boolean        @default(true)
+  isDeleted                         Boolean        @default(false)
+  lastReminderAt                    DateTime?
+  notes                             String?
+  parentContractId                  Int?
+  rejectedAt                        DateTime?
+  rejectedById                      Int?
+  rejectionReason                   String?
+  revisionNote                      String?
+  submittedAt                       DateTime?
+  submittedById                     Int?
+  User_Contract_approvedByIdToUser  User?          @relation("Contract_approvedByIdToUser", fields: [approvedById], references: [id])
+  User_Contract_createdByIdToUser   User?          @relation("Contract_createdByIdToUser", fields: [createdById], references: [id])
+  Contract                          Contract?      @relation("ContractToContract", fields: [parentContractId], references: [id])
+  other_Contract                    Contract[]     @relation("ContractToContract")
+  User_Contract_rejectedByIdToUser  User?          @relation("Contract_rejectedByIdToUser", fields: [rejectedById], references: [id])
+  User_Contract_submittedByIdToUser User?          @relation("Contract_submittedByIdToUser", fields: [submittedById], references: [id])
+  user                              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Salary {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  month       Int
+  year        Int
+  baseSalary  Float     @default(0)
+  allowance   Float     @default(0)
+  bonus       Float     @default(0)
+  deduction   Float     @default(0)
+  totalSalary Float
+  status      String    @default("PENDING")
+  paymentDate DateTime?
+  note        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month, year])
+}
+
+model Customer {
+  id            Int     @id @default(autoincrement())
+  companyName   String
+  contactPerson String?
+  address       String?
+  phone         String?
+  taxCode       String?
+  jobs          Job[]
+}
+
+model Job {
+  id                         Int             @id @default(autoincrement())
+  title                      String
+  status                     String          @default("NEW")
+  createdAt                  DateTime        @default(now())
+  customerId                 Int?
+  managerId                  Int?
+  jobType                    String          @default("KHACH_HANG")
+  department                 String?
+  actualHours                Float?          @default(0)
+  code                       String?         @unique
+  createdById                Int?
+  deletedAt                  DateTime?
+  description                String?
+  dueDate                    DateTime?
+  estimatedHours             Float?          @default(0)
+  priority                   String          @default("NORMAL")
+  progress                   Int             @default(0)
+  startDate                  DateTime?
+  updatedAt                  DateTime        @default(now())
+  invoices                   Invoice[]
+  User_Job_createdByIdToUser User?           @relation("Job_createdByIdToUser", fields: [createdById], references: [id])
+  customer                   Customer?       @relation(fields: [customerId], references: [id])
+  manager                    User?           @relation("ManagerJobs", fields: [managerId], references: [id])
+  JobAssignee                JobAssignee[]
+  JobAttachment              JobAttachment[]
+  JobChecklist               JobChecklist[]
+  JobComment                 JobComment[]
+  JobLabel                   JobLabel[]
+  JobLog                     JobLog[]
+  JobWatcher                 JobWatcher[]
+  tasks                      Task[]
+
+  @@index([deletedAt])
+  @@index([dueDate])
+  @@index([priority])
+  @@index([status])
+}
+
+model Task {
+  id           Int       @id @default(autoincrement())
+  description  String
+  imageReport  String?
+  status       String    @default("CHƯA LÀM")
+  jobId        Int
+  technicianId Int?
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  job          Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  technician   User?     @relation("TechnicianTasks", fields: [technicianId], references: [id])
+}
+
+model Invoice {
+  id            Int      @id @default(autoincrement())
+  amount        Float
+  paymentMethod String?
+  isPaid        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  jobId         Int
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id        Int              @id @default(autoincrement())
+  name      String
+  sku       String           @unique
+  category  String
+  price     Float            @default(0)
+  stock     Int              @default(0)
+  unit      String           @default("Cái")
+  status    String           @default("ACTIVE")
+  imageUrl  String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  variants  ProductVariant[]
+}
+
+model ProductVariant {
+  id        Int     @id @default(autoincrement())
+  productId Int
+  name      String
+  sku       String  @unique
+  price     Float   @default(0)
+  stock     Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model SalesOrder {
+  id           Int         @id @default(autoincrement())
+  orderNo      String      @unique
+  customerId   Int
+  customerName String
+  status       String      @default("PENDING")
+  totalAmount  Float       @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id          Int        @id @default(autoincrement())
+  orderId     Int
+  productName String
+  quantity    Int
+  price       Float
+  order       SalesOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model Feedback {
+  id            Int      @id @default(autoincrement())
+  description   String
+  imageUrl      String?
+  pagePath      String?
+  status        String   @default("CHO_XU_LY")
+  reporterId    Int?
+  createdAt     DateTime @default(now())
+  adminNote     String?
+  updatedAt     DateTime @updatedAt
+  errorCategory String?
+  handlerId     Int?
+  solution      String?
+  handler       User?    @relation("HandlerRelation", fields: [handlerId], references: [id])
+  reporter      User?    @relation("ReporterRelation", fields: [reporterId], references: [id])
+}
+
+model SystemLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  details   String
+  module    String   @default("HỆ THỐNG")
+  userId    Int?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model KanbanBoard {
+  id           Int            @id @default(autoincrement())
+  title        String
+  createdAt    DateTime       @default(now())
+  KanbanColumn KanbanColumn[]
+  KanbanTask   KanbanTask[]
+}
+
+model KanbanColumn {
+  id          Int          @id @default(autoincrement())
+  title       String
+  order       Int
+  boardId     Int
+  KanbanBoard KanbanBoard  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  KanbanTask  KanbanTask[]
+}
+
+model KanbanTask {
+  id                              Int                   @id @default(autoincrement())
+  title                           String
+  description                     String?
+  priority                        String                @default("NORMAL")
+  boardId                         Int
+  columnId                        Int
+  order                           Int                   @default(0)
+  creatorId                       Int?
+  createdAt                       DateTime              @default(now())
+  updatedAt                       DateTime              @updatedAt
+  isArchived                      Boolean               @default(false)
+  dueDate                         DateTime?
+  taskType                        String?               @default("TASK")
+  progress                        Int                   @default(0)
+  KanbanActivity                  KanbanActivity[]
+  KanbanAttachment                KanbanAttachment[]
+  KanbanComment                   KanbanComment[]
+  KanbanChecklistItem             KanbanChecklistItem[]
+  KanbanBoard                     KanbanBoard           @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  KanbanColumn                    KanbanColumn          @relation(fields: [columnId], references: [id])
+  User_KanbanTask_creatorIdToUser User?                 @relation("KanbanCreator", fields: [creatorId], references: [id])
+  User_KanbanAssignee             User[]                @relation("KanbanAssignee")
+
+  @@index([isArchived])
+}
+
+model KanbanComment {
+  id         Int        @id @default(autoincrement())
+  content    String
+  taskId     Int
+  userId     Int?
+  createdAt  DateTime   @default(now())
+  isDeleted  Boolean    @default(false)
+  isEdited   Boolean    @default(false)
+  KanbanTask KanbanTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  User       User?      @relation(fields: [userId], references: [id])
+}
+
+model KanbanActivity {
+  id         Int        @id @default(autoincrement())
+  action     String
+  details    String?
+  taskId     Int
+  userId     Int?
+  createdAt  DateTime   @default(now())
+  KanbanTask KanbanTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  User       User?      @relation(fields: [userId], references: [id])
+}
+
+model KanbanAttachment {
+  id         Int        @id @default(autoincrement())
+  url        String
+  name       String?
+  taskId     Int
+  createdAt  DateTime   @default(now())
+  KanbanTask KanbanTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}
+
+model KanbanChecklistItem {
+  id          Int        @id @default(autoincrement())
+  title       String
+  isCompleted Boolean    @default(false)
+  taskId      Int
+  assigneeId  Int?
+  order       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  KanbanTask  KanbanTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  Assignee    User?      @relation("KanbanChecklistAssignee", fields: [assigneeId], references: [id])
+}
+
+model Transaction {
+  id            Int      @id @default(autoincrement())
+  type          String
+  amount        Float
+  category      String
+  description   String
+  date          DateTime
+  paymentMethod String   @default("TIEN_MAT")
+  reference     String?
+  createdById   Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     User?    @relation("TransactionCreator", fields: [createdById], references: [id])
+
+  @@index([date])
+  @@index([type])
+  @@index([category])
+}
+
+model MaintenanceTask {
+  id          Int               @id @default(autoincrement())
+  code        String            @unique
+  title       String
+  description String?
+  location    String?
+  assigneeId  Int?
+  dueDate     DateTime?
+  status      String            @default("PENDING")
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  items       MaintenanceItem[]
+  assignee    User?             @relation("MaintenanceAssignee", fields: [assigneeId], references: [id])
+
+  @@index([status])
+}
+
+model MaintenanceItem {
+  id      Int             @id @default(autoincrement())
+  taskId  Int
+  content String
+  status  String          @default("NONE")
+  note    String?
+  order   Int             @default(0)
+  task    MaintenanceTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id          Int             @id @default(autoincrement())
+  code        String          @unique
+  name        String
+  description String?
+  managerId   Int?
+  createdById Int?
+  customerId  Int?
+  startDate   DateTime?
+  endDate     DateTime?
+  status      String          @default("IN_PROGRESS")
+  progress    Int             @default(0)
+  budget      Float?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  createdBy   User?           @relation("ProjectCreator", fields: [createdById], references: [id])
+  manager     User?           @relation("ProjectManager", fields: [managerId], references: [id])
+  logs        ProjectLog[]
+  members     ProjectMember[]
+  phases      ProjectPhase[]
+
+  @@index([status])
+}
+
+model ProjectPhase {
+  id          Int       @id @default(autoincrement())
+  projectId   Int
+  name        String
+  description String?
+  order       Int       @default(0)
+  status      String    @default("PENDING")
+  assigneeId  Int?
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  assignee    User?     @relation("PhaseAssignee", fields: [assigneeId], references: [id])
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model ProjectMember {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  userId    Int
+  role      String?  @default("MEMBER")
+  joinedAt  DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation("ProjectMember", fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+}
+
+model ProjectLog {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  userId    Int?
+  message   String
+  phaseId   Int?
+  createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User?    @relation("ProjectLogger", fields: [userId], references: [id])
+
+  @@index([projectId])
+}
+
+model Quote {
+  id            Int         @id @default(autoincrement())
+  code          String      @unique
+  title         String
+  customerId    Int?
+  contactName   String?
+  contactPhone  String?
+  contactEmail  String?
+  companyName   String?
+  notes         String?
+  totalAmount   Float       @default(0)
+  vatPercent    Float       @default(10)
+  discount      Float       @default(0)
+  finalAmount   Float       @default(0)
+  status        String      @default("DRAFT")
+  validUntil    DateTime?
+  createdById   Int?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  address       String?
+  contactRole   String?
+  deliveryTerms String?
+  paymentTerms  String?
+  taxCode       String?
+  warrantyTerms String?
+  createdBy     User?       @relation("QuoteCreator", fields: [createdById], references: [id])
+  items         QuoteItem[]
+
+  @@index([status])
+}
+
+model QuoteItem {
+  id        Int     @id @default(autoincrement())
+  quoteId   Int
+  name      String
+  unit      String  @default("Cái")
+  quantity  Float   @default(1)
+  unitPrice Float   @default(0)
+  total     Float   @default(0)
+  note      String?
+  order     Int     @default(0)
+  quote     Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+model EconomicContract {
+  id            Int       @id @default(autoincrement())
+  code          String    @unique
+  title         String
+  customerId    Int?
+  contactName   String?
+  companyName   String?
+  contractValue Float     @default(0)
+  paidAmount    Float     @default(0)
+  status        String    @default("DRAFT")
+  signedDate    DateTime?
+  startDate     DateTime?
+  endDate       DateTime?
+  description   String?
+  attachmentUrl String?
+  createdById   Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  address       String?
+  contactRole   String?
+  paymentTerms  String?
+  taxCode       String?
+  warrantyTerms String?
+  createdBy     User?     @relation("EconContractCreator", fields: [createdById], references: [id])
+
+  @@index([status])
+}
+
+model Notification {
+  id                                 Int      @id @default(autoincrement())
+  message                            String
+  type                               String   @default("INFO")
+  isRead                             Boolean  @default(false)
+  createdAt                          DateTime @default(now())
+  title                              String
+  link                               String?
+  receiverId                         Int?
+  senderId                           Int?
+  User_Notification_receiverIdToUser User?    @relation("Notification_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade)
+  User_Notification_senderIdToUser   User?    @relation("Notification_senderIdToUser", fields: [senderId], references: [id])
+}
+
+model JobAssignee {
+  id     Int  @id @default(autoincrement())
+  jobId  Int
+  userId Int
+  Job    Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
+  @@index([userId])
+}
+
+model JobAttachment {
+  id         Int      @id @default(autoincrement())
+  jobId      Int
+  url        String
+  name       String
+  size       Int?
+  mimeType   String?
+  uploadedBy Int?
+  createdAt  DateTime @default(now())
+  Job        Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User       User?    @relation(fields: [uploadedBy], references: [id])
+
+  @@index([jobId])
+}
+
+model JobChecklist {
+  id          Int       @id @default(autoincrement())
+  jobId       Int
+  content     String
+  isCompleted Boolean   @default(false)
+  order       Int       @default(0)
+  completedAt DateTime?
+  completedBy Int?
+  createdAt   DateTime  @default(now())
+  User        User?     @relation(fields: [completedBy], references: [id])
+  Job         Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+}
+
+model JobComment {
+  id        Int      @id @default(autoincrement())
+  jobId     Int
+  userId    Int?
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User      User?    @relation(fields: [userId], references: [id])
+
+  @@index([jobId])
+}
+
+model JobLabel {
+  id    Int    @id @default(autoincrement())
+  jobId Int
+  name  String
+  color String @default("#64748b")
+  Job   Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+}
+
+model JobLog {
+  id        Int      @id @default(autoincrement())
+  jobId     Int
+  userId    Int?
+  action    String
+  field     String?
+  oldValue  String?
+  newValue  String?
+  message   String
+  createdAt DateTime @default(now())
+  Job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User      User?    @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+  @@index([jobId])
+}
+
+model JobWatcher {
+  id     Int  @id @default(autoincrement())
+  jobId  Int
+  userId Int
+  Job    Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
+}
+
+model LeaveRequest {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  type            String
+  startDate       DateTime
+  endDate         DateTime
+  totalDays       Float
+  reason          String
+  note            String?
+  status          String    @default("PENDING")
+  approvedById    Int?
+  approvedAt      DateTime?
+  rejectedById    Int?
+  rejectedAt      DateTime?
+  rejectionReason String?
+  cancelledAt     DateTime?
+  cancelledById   Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  User            User      @relation(fields: [userId], references: [id])
+}
+
+enum ApprovalStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  REVISION
+}
+
+enum JobPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum JobStatus {
+  NEW
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+  CANCELLED
+  OVERDUE
+}

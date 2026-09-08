@@ -1,0 +1,1 @@
+const { PrismaClient } = require('@prisma/client'); const prisma = new PrismaClient(); async function main() { console.log('ARTICLES:', await prisma.article.count()); console.log('PUBLISHED:', await prisma.article.count({where: {status: 'PUBLISHED'}})); } main();
