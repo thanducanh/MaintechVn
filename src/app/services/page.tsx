@@ -1,22 +1,22 @@
-import { Phone } from "lucide-react";
 import PageBanner from "@/components/PageBanner";
-import { getDisplayServicesAction, getServicesPageConfigAction } from "@/actions/services";
 import Services from "@/components/Services";
+import { siteConfig, services as staticServices } from "@/data/site-content";
 
 const SERVICES_BANNER_FALLBACK = "/images/maintech-page-banner.png";
 
-export const dynamic = "force-dynamic";
+export default function ServicesPage() {
+    const displayServices = staticServices.filter((s: any) => s.category !== "CHUNG_CHI" && s.category !== "DOI_TAC" && s.category !== "CHUNG_CHI_LOAI");
+    
+    // Parse siteConfig.home to extract banner config if it exists
+    let config: any = null;
+    if (typeof siteConfig.home === 'string') {
+        try { config = JSON.parse(siteConfig.home); } catch (e) {}
+    } else {
+        config = siteConfig.home;
+    }
 
-export default async function ServicesPage() {
-    // Fetch data directly on the server
-    const dbServices = await getDisplayServicesAction() || [];
-    const bannerConfig = await getServicesPageConfigAction() || null;
-
-    const displayServices = [...dbServices];
-
-    // Banner config with fallback
-    const hero = bannerConfig?.hero || {};
-    const backgroundImage = hero.backgroundImage || SERVICES_BANNER_FALLBACK;
+    const hero = config?.services?.hero || {};
+    const backgroundImage = siteConfig.banner || SERVICES_BANNER_FALLBACK;
     const overlayOpacity = hero.overlayOpacity !== undefined ? hero.overlayOpacity : 1.0;
 
     return (

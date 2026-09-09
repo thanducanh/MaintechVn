@@ -1,5 +1,5 @@
 // 📍 File: src/app/about/page.tsx
-import prisma from "@/lib/prisma";
+import { siteConfig, services as staticServices } from "@/data/site-content";
 import AboutPublicContent from "@/components/AboutPublicContent"; 
 import PageBanner from "@/components/PageBanner"; // 🚀 Import Banner mới
 import LocalizedBannerContent from "@/components/LocalizedBannerContent";
@@ -24,25 +24,12 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-export default async function AboutPage() {
-    const rawAboutData = await prisma.article.findFirst({
-        where: { category: "GIOI_THIEU" },
-        orderBy: { updatedAt: 'desc' }
-    });
-    const rawCertificates = await prisma.service.findMany({ 
-        where: { category: "CHUNG_CHI", status: { in: ["PUBLISHED", "HIỂN THỊ"] } }, 
-        orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] 
-    });
-    const rawPartners = await prisma.service.findMany({ 
-        where: { category: "DOI_TAC", status: { in: ["PUBLISHED", "HIỂN THỊ"] } }, 
-        orderBy: [{ order: 'asc' }, { createdAt: 'desc' }] 
-    });
-    const rawCategories = await prisma.service.findMany({
-        where: { category: "CHUNG_CHI_LOAI", status: { in: ["PUBLISHED", "HIỂN THỊ"] } },
-        orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
-    });
-
-    const aboutData = rawAboutData ? JSON.parse(JSON.stringify(rawAboutData)) : null;
+export default function AboutPage() {
+    const aboutData: any = siteConfig.about;
+    const rawCertificates = staticServices.filter((s: any) => s.category === "CHUNG_CHI");
+    const rawPartners = staticServices.filter((s: any) => s.category === "DOI_TAC");
+    const rawCategories = staticServices.filter((s: any) => s.category === "CHUNG_CHI_LOAI");
+    
     let processConfig: any = undefined;
     if (aboutData?.content) {
         try {

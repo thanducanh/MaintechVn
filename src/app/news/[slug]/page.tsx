@@ -3,25 +3,24 @@ import Link from "next/link";
 import PageBanner from "@/components/PageBanner";
 import { Search, Facebook, Twitter, Linkedin, Instagram, ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { Metadata } from "next";
-import prisma from "@/lib/prisma";
-
-const sampleNews: Record<string, any> = {
-    "maintech-industrial-updates": { title: "Cập nhật hoạt động kỹ thuật Maintech", image: "/uploads/services/1778675193146_ThietKeLapDatThietBiCang.png", summary: "Maintech Vietnam liên tục nâng cao năng lực khảo sát, thiết kế, lắp đặt và bảo trì thiết bị công nghiệp.", content: "Maintech Vietnam tập trung triển khai các giải pháp kỹ thuật an toàn, bền vững cho cảng biển, kho bãi và nhà máy. Đội ngũ kỹ sư đồng hành từ khảo sát hiện trạng, thiết kế, lắp đặt đến bảo trì định kỳ, giúp khách hàng duy trì năng suất ổn định." },
-    "engineering-solutions": { title: "Giải pháp kỹ thuật công nghiệp", image: "/uploads/services/1778675523223_BaoTriThietBiCang.png", summary: "Khám phá năng lực triển khai và bảo trì thiết bị công nghiệp của Maintech.", content: "Với kinh nghiệm thực tế trên nhiều hệ thống nâng hạ và dây chuyền sản xuất, Maintech cung cấp giải pháp xử lý sự cố, thay thế linh kiện và nâng cấp điều khiển phù hợp với từng nhà máy." },
-    "maintech-projects": { title: "Dự án tiêu biểu", image: "/uploads/services/1778675416166_BaoTriThietBiNganhCang.png", summary: "Các dự án tiêu biểu thể hiện tiêu chuẩn và kinh nghiệm của đội ngũ Maintech.", content: "Mỗi dự án của Maintech được triển khai theo quy trình rõ ràng: khảo sát, lập phương án kỹ thuật, thi công an toàn, nghiệm thu và bàn giao. Chúng tôi ưu tiên hiệu quả vận hành lâu dài và khả năng bảo trì." },
-};
+import { siteConfig, articles as staticArticles } from "@/data/site-content";
 
 export const metadata: Metadata = {
     title: "Tin Tức | Maintech Vietnam",
 };
 
+export async function generateStaticParams() {
+    return staticArticles.map((article: any) => ({
+        slug: String(article.slug),
+    }));
+}
+
 export default async function BlogSinglePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    let article: any = null;
-    try { article = await prisma.article.findUnique({ where: { slug } }); } catch {}
-    const data = article || sampleNews[slug] || sampleNews["maintech-industrial-updates"];
+    const article = staticArticles.find((a: any) => String(a.slug) === slug);
+    const data: any = article || staticArticles[0] || {};
     const title = data.title || "Tin tức Maintech Vietnam";
-    const image = data.imageUrl || data.image;
+    const image = data.imageUrl || data.image || "/images/maintech-page-banner.png";
     const summary = data.summary || "Thông tin kỹ thuật mới nhất từ Maintech Vietnam.";
     const content = data.content || summary;
     return (

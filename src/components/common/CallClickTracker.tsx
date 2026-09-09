@@ -7,7 +7,6 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { trackCallClickAction } from "@/actions/contact";
 
 export default function CallClickTracker() {
     const pathname = usePathname();
@@ -17,7 +16,7 @@ export default function CallClickTracker() {
             const target = e.target as HTMLElement;
             const link = target?.closest?.("a[href^='tel:']");
             if (link) {
-                trackCallClickAction(pathname).catch(() => {});
+                console.log('Call click tracked on', pathname);
             }
         };
 

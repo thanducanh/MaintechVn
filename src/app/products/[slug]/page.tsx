@@ -1,12 +1,18 @@
-import prisma from "@/lib/prisma";
+import { products as staticProducts } from "@/data/site-content";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
 
+export async function generateStaticParams() {
+  return staticProducts.map((product: any) => ({
+    slug: String(product.slug),
+  }));
+}
+
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = await prisma.product.findUnique({ where: { slug } });
+  const product: any = staticProducts.find((p: any) => p.slug === slug);
   if (!product) notFound();
 
   const specifications = (product.specifications ?? {}) as Record<string, string | number>;

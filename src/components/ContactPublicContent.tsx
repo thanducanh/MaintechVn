@@ -8,7 +8,6 @@ import {
     MapPin, Send, Loader2
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { submitContactForm, trackCallClickAction } from "@/actions/contact";
 import toast from "react-hot-toast";
 
 export default function ContactPublicContent({ data }: { data: any }) {
@@ -22,21 +21,19 @@ export default function ContactPublicContent({ data }: { data: any }) {
         e.preventDefault();
         setIsSubmitting(true);
         const form = e.target as HTMLFormElement;
-        const formData = new FormData(form);
-        const res = await submitContactForm(formData);
+        
+        // Simulating the action locally via mailto
+        const email = data.contactInfo?.emails?.[0] || "mtv@maintechvn.com.vn";
+        window.location.href = `mailto:${email}?subject=Liên hệ từ website`;
         
         setIsSubmitting(false);
-        if ((res as any)?.success) {
-            setIsSuccess(true);
-            form.reset();
-            setTimeout(() => setIsSuccess(false), 5000);
-        } else {
-            toast.error((res as any)?.message || "Có lỗi xảy ra, vui lòng thử lại!");
-        }
+        setIsSuccess(true);
+        form.reset();
+        setTimeout(() => setIsSuccess(false), 5000);
     };
 
     const handleCallClick = () => {
-        trackCallClickAction();
+        // tracking removed for static version
     };
 
     const resolveLocalized = (value: any, locale: "vi" | "en", fallback = "") => {

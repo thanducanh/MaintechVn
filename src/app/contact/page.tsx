@@ -1,12 +1,17 @@
 ﻿// ðŸ“ File: src/app/contact/page.tsx
 import React from "react";
-import { getContactConfigAction } from "@/actions/contact";
+import { siteConfig } from "@/data/site-content";
 import ContactPublicContent from "@/components/ContactPublicContent";
 
 export const dynamic = 'force-dynamic';
 
-export default async function ContactPage() {
-    const config = await getContactConfigAction();
+export default function ContactPage() {
+    let config: any = {};
+    try {
+        if (typeof siteConfig.contact === 'string') config = JSON.parse(siteConfig.contact);
+        else config = siteConfig.contact;
+    } catch(e) {}
+    
     
     // Default Fallbacks
     const defaultData = {

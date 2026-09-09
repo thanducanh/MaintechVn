@@ -121,16 +121,9 @@ export const viewport: Viewport = {
     themeColor: "#C8102E",
     viewportFit: "cover",
 };
+import { siteConfig } from "@/data/site-content";
 
-import { getSiteLogoAction } from "@/actions/settings";
-import { getHomepageConfigAction } from "@/actions/home";
-import { getContactAction } from "@/actions/contact";
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const siteLogo = await getSiteLogoAction();
-    const homepageConfig = await getHomepageConfigAction();
-    const contactInfo = await getContactAction();
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="vi" className={`${mainFont.variable} ${interFont.variable} ${vintageFont.variable} ${robotoFont.variable} ${playfairFont.variable} ${oswaldFont.variable} ${bangersFont.variable} ${greatVibesFont.variable} ${beVietnamFont.variable} ${spaceGroteskFont.variable}`} suppressHydrationWarning>
             <head>
@@ -141,9 +134,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <body className="w-full min-h-screen overflow-x-clip bg-background font-sans antialiased text-foreground">
                 <LanguageProvider>
                     <PublicShell
-                        siteLogo={siteLogo}
-                        homepageConfig={homepageConfig}
-                        contactData={contactInfo}
+                        siteLogo={siteConfig.logo}
+                        homepageConfig={null}
+                        contactData={siteConfig}
                     >
                         {children}
                     </PublicShell>
