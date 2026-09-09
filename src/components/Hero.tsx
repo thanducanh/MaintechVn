@@ -30,20 +30,20 @@ export default function Hero({ config }: { config?: any }) {
     const hasConfig = !!config && !!config.hero;
     
     const badgeText = hasConfig 
-        ? ((isVN ? config.hero.badge_vi : config.hero.badge_en) || (isVN ? "Giải pháp công nghiệp Maintech" : "Maintech Industrial Solutions"))
-        : (isVN ? "Giải pháp công nghiệp Maintech" : "Maintech Industrial Solutions");
+        ? ((isVN ? config.hero.badge_vi : config.hero.badge_en) || ("MAINTECH INDUSTRIAL SOLUTIONS"))
+        : ("MAINTECH INDUSTRIAL SOLUTIONS");
 
     const title1 = hasConfig 
         ? (isVN ? config.hero.title1_vi : config.hero.title1_en)
-        : t("hero.title1");
+        : "Nâng tầm hiệu suất";
 
     const title2 = hasConfig 
         ? (isVN ? config.hero.title2_vi : config.hero.title2_en)
-        : t("hero.title2");
+        : "Công nghiệp hiện đại";
 
     const description = hasConfig 
         ? (isVN ? config.hero.desc_vi : config.hero.desc_en)
-        : t("hero.description");
+        : "MAINTECHVN - Đối tác tin cậy trong cung cấp thiết bị, giải pháp kỹ thuật và dịch vụ bảo trì cho các ngành công nghiệp.";
 
     const btn1Text = hasConfig 
         ? (isVN ? config.hero.btn1_text_vi : config.hero.btn1_text_en)
@@ -59,7 +59,7 @@ export default function Hero({ config }: { config?: any }) {
 
     // Resolve background image
     const cmsBgImage = hasConfig && config.hero.backgroundImage ? config.hero.backgroundImage : null;
-    const bgImageToUse = cmsBgImage || currentBg || "/images/services-hero-bg.jpg";
+    const bgImageToUse = cmsBgImage || currentBg || "/images/maintech-page-banner.png";
 
     // Resolve overlay opacity
     const overlayOpacity = hasConfig && typeof config.hero.overlayOpacity === 'number'

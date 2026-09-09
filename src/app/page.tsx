@@ -51,18 +51,7 @@ export default async function Home() {
     }
 
     const heroContent = config?.hero;
-    const showHero = config
-        ? Boolean(heroContent && [
-            heroContent.badge_vi,
-            heroContent.badge_en,
-            heroContent.title1_vi,
-            heroContent.title1_en,
-            heroContent.title2_vi,
-            heroContent.title2_en,
-            heroContent.desc_vi,
-            heroContent.desc_en,
-        ].some((value) => typeof value === "string" && value.trim() !== ""))
-        : true;
+    const showHero = true;
     const showIntro = config ? config.intro?.active !== false : true;
     const servicesContent = config?.services;
     const showServices = config
@@ -81,7 +70,7 @@ export default async function Home() {
 
     return (
         <main className="w-full min-h-screen overflow-x-clip bg-[#0B0F19] font-sans text-slate-100">
-            <ClientOnly>
+            
             
             {/* HERO / BANNER CHÍNH */}
             {showHero && <Hero config={config} />}
@@ -107,7 +96,7 @@ export default async function Home() {
             {/* ĐỐI TÁC CHIẾN LƯỢC */}
             {showPartners && <PartnersStrip partners={partners} config={config} />}
 
-            </ClientOnly>
+            
         </main>
     );
 }
