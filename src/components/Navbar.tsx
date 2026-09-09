@@ -204,6 +204,7 @@ export default function Navbar({ initialSiteLogo, initialHomepageConfig }: { ini
                             src={headerConfig.logoUrl || siteLogo || "/images/site-logo-maintech.png"}
                             alt="Maintech Logo"
                             fill
+                            sizes="180px"
                             className="object-contain"
                             priority
                         />
