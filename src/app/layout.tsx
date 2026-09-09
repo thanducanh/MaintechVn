@@ -133,6 +133,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body className="w-full min-h-screen overflow-x-clip bg-background font-sans antialiased text-foreground">
                 <LanguageProvider>
+                    <LanguageSelectOverlay />
                     <PublicShell
                         siteLogo={siteConfig.logo}
                         homepageConfig={null}
