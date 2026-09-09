@@ -14,7 +14,7 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import ClientOnly from "@/components/ClientOnly";
 import { siteConfig, services as staticServices, articles as staticArticles, products as staticProducts } from "@/data/site-content";
 
-export const dynamic = 'force-dynamic';
+
 
 const sampleTeam = [
     { name: "Nguyễn Đình Thanh", name_en: "Nguyen Dinh Thanh", role_vi: "Tổng giám đốc (CEO)", role_en: "Chief Executive Officer (CEO)", image: "/uploads/services/ceo-maintech.png", credentials: [{name:"PAT-Krüger Crane Systems Maintenance",year:"2015",image:"/uploads/certificates/certificate-9.png"},{name:"Bromma Spreader, PLC & SCS2 System",year:"2009",image:"/uploads/certificates/certificate-10.png"},{name:"Kalmar RG E-One Advanced Level",year:"2011",image:"/uploads/certificates/certificate-12.png"},{name:"Hänel Service and Product Training",year:"2015",image:"/uploads/certificates/certificate-13.png"}] },

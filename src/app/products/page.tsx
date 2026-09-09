@@ -3,7 +3,7 @@
 import { products as staticProducts } from "@/data/site-content";
 import ProductsClient from "./ProductsClient";
 
-export const revalidate = 0; // Bypass cache to ensure instant settings sync updates
+ // Bypass cache to ensure instant settings sync updates
 
 export default function ProductsPage() {
     const products = staticProducts || [];

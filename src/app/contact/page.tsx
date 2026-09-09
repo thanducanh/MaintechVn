@@ -3,7 +3,7 @@ import React from "react";
 import { siteConfig } from "@/data/site-content";
 import ContactPublicContent from "@/components/ContactPublicContent";
 
-export const dynamic = 'force-dynamic';
+
 
 export default function ContactPage() {
     let config: any = {};
