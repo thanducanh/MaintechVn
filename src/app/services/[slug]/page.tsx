@@ -29,7 +29,8 @@ export default async function ServiceSlugPage({ params }: { params: Promise<{ sl
   }
   
   const detail = config?.serviceDetails?.[service.slug] || {};
-  const detailImage = detail.imageUrl ?? service.imageUrl ?? "";
+  const rawImage = detail.imageUrl ?? service.imageUrl ?? "";
+  const detailImage = rawImage && !rawImage.startsWith("/uploads/") ? rawImage : "/images/maintech-page-banner.png";
   const titleVi = String(detail.title_vi || service.title || "Dịch vụ kỹ thuật");
   const titleEn = String(detail.title_en || localized.title_en || service.title || titleVi);
   const contentVi = detail.content_vi || localized.vi || service.content || service.desc_vi || service.summary || "";
@@ -47,11 +48,11 @@ export default async function ServiceSlugPage({ params }: { params: Promise<{ sl
       <section className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 py-12 md:px-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:px-16">
         <article className="min-w-0">
           <div className="relative mx-auto aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-lg bg-slate-100">
-            {detailImage ? <Image src={detailImage} alt={titleVi || "Maintech service"} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 768px" /> : <div className="flex h-full items-center justify-center text-sm font-semibold text-slate-400">Chưa có hình ảnh dịch vụ</div>}
+            <Image src={detailImage} alt={titleVi || "Maintech service"} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 768px" />
           </div>
           <h1 className="mt-8 text-3xl font-bold tracking-tight text-[#071b49] md:text-4xl">{titleVi}</h1><div className="mt-5 max-w-3xl whitespace-pre-wrap text-[15px] leading-8 text-slate-600">{contentVi}</div>
           <ul className="mt-10 grid grid-cols-1 gap-4 border-t border-slate-200 pt-8 md:grid-cols-2">{["Khảo sát thực tế", "Thiết kế linh kiện phù hợp", "Lắp đặt và chạy thử", "Bảo trì và hỗ trợ kỹ thuật"].map((item) => <li key={item} className="flex items-center gap-3 text-slate-700"><CheckCircle2 size={18} className="text-[#C8102E]" />{item}</li>)}</ul>
-          <h2 className="mt-14 text-2xl font-black">Related Service</h2><div className="mt-5 grid gap-5 sm:grid-cols-3">{related.map((item: any, index: number) => <Link key={item.id} href={`/services/${item.slug}`} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"><div className="relative aspect-[4/3] bg-slate-100">{item.imageUrl && <Image src={item.imageUrl} alt={String(item.title_vi || item.title || "Maintech service")} fill className="object-cover" sizes="300px" />}<span className="absolute right-2 top-2 text-3xl font-black text-transparent [-webkit-text-stroke:1px_white]">{String(index + 1).padStart(2, "0")}</span></div><div className="p-4"><h3 className="line-clamp-2 text-sm font-black uppercase">{item.title_vi || item.title}</h3><span className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase text-[#C8102E]">Xem chi tiết <ArrowRight size={13} /></span></div></Link>)}</div>
+          <h2 className="mt-14 text-2xl font-black">Related Service</h2><div className="mt-5 grid gap-5 sm:grid-cols-3">{related.map((item: any, index: number) => <Link key={item.id} href={`/services/${item.slug}`} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"><div className="relative aspect-[4/3] bg-slate-100"><Image src={item.imageUrl && !item.imageUrl.startsWith("/uploads/") ? item.imageUrl : "/images/maintech-page-banner.png"} alt={String(item.title_vi || item.title || "Maintech service")} fill className="object-cover" sizes="300px" /><span className="absolute right-2 top-2 text-3xl font-black text-transparent [-webkit-text-stroke:1px_white]">{String(index + 1).padStart(2, "0")}</span></div><div className="p-4"><h3 className="line-clamp-2 text-sm font-black uppercase">{item.title_vi || item.title}</h3><span className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase text-[#C8102E]">Xem chi tiết <ArrowRight size={13} /></span></div></Link>)}</div>
         </article>
         <aside className="self-start lg:sticky lg:top-8">
           <ContactForm

@@ -91,6 +91,16 @@ export default function Hero({ config }: { config?: any }) {
         }
     };
 
+    const safeTitle1 =
+      typeof title1 === "string" && title1.trim().length > 0
+        ? title1
+        : "KỸ THUẬT CHUYÊN BIỆT";
+
+    const safeTitle2 =
+      typeof title2 === "string" && title2.trim().length > 0
+        ? title2
+        : "HIỆU SUẤT TỐI ƯU";
+
     return (
         <section className="relative flex h-screen min-h-[750px] flex-col items-center justify-center overflow-hidden bg-[#0B0F19]">
 
@@ -187,7 +197,7 @@ export default function Hero({ config }: { config?: any }) {
                     {/* Headline */}
                     <div className="relative mb-10">
                         <h1 className="text-[26px] md:text-[38px] lg:text-[46px] xl:text-[54px] font-black text-white leading-[1.02] tracking-[-0.03em] max-w-5xl [text-shadow:_0_2px_4px_rgba(0,0,0,0.15)]">
-                            {title1.split(" ").map((word: string, i: number) => (
+                            {safeTitle1.split(" ").map((word: string, i: number) => (
                                 <motion.span
                                     key={i}
                                     initial={{ opacity: 0, y: 30 }}
@@ -198,11 +208,11 @@ export default function Hero({ config }: { config?: any }) {
                                     {word}
                                 </motion.span>
                             ))}
-                            {title2 && (
+                            {safeTitle2 && (
                                 <>
                                     <br />
                                     <span className="text-[#C8102E] block mt-2 font-black">
-                                        {title2.split(" ").map((word: string, i: number) => (
+                                        {safeTitle2.split(" ").map((word: string, i: number) => (
                                             <motion.span
                                                 key={i}
                                                 initial={{ opacity: 0, y: 20 }}

@@ -73,7 +73,7 @@ export default async function Home() {
             
             
             {/* HERO / BANNER CHÍNH */}
-            {showHero && <Hero config={config} />}
+            {showHero && <Hero config={config || siteConfig.home} />}
             
             {/* GIỚI THIỆU NHANH (Mission) */}
             {showIntro && <Mission aboutData={aboutData} config={config} homeImageUrl={(aboutData as any)?.imageUrl || null} />}
